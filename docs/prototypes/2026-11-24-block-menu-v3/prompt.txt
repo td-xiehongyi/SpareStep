@@ -1,0 +1,9 @@
+Edit the supplied FTM grayscale V2 mobile homepage wireframe to show one NEW STATE: tapping the nine-dot grip of the FIRST task opens its contextual action menu. The first image is the base edit target. The second image is the user's exact nine-dot handle reference (3 by 3 grid). Preserve all existing page content, proportions (852x1846 portrait, conceptual viewport 390x844), monochrome look, FTM header/gear, section headings 短期 长期 随手记 with category-local plus buttons, and full text task blocks. Do not add pages, global add button, checkboxes, account or decorative elements.
+The FIRST task remains fully visible, text "补充实验截图，完成报告" and "把运行结果截图补齐，再检查报告格式。". Its right top nine-dot icon is the MENU ANCHOR: darken its nine dots and place a very subtle gray rounded touch-target background behind only that icon.
+Open a small white contextual popup anchored directly below that icon, aligned to the right content margin. Popup width about 172 CSS px, three comfortable touch rows each about 46 px high, very subtle shadow, small radius, thin gray outline. Exact three labels in this order:
+"完成并归档" with a simple check icon
+"移动到分类" with a simple folder/arrow icon and small right chevron
+"删除" with a simple trash icon
+Use a thin separator before the delete row; grayscale only, no red. Popup naturally overlays part of the SECOND task only, not a full-screen modal, not a new permanent panel; other text remains in its original position. No background dimmer.
+The existing first-line text emphasis is presentational; do not invent a separate editable title field. No completion progress, swipe state, keyboard or drag arrow at the same time.
+At the bottom in place of the original footer hint, use a compact WIREFRAME-ONLY dotted annotation box with two readable lines: "点击九点：打开菜单" and "按住九点并移动：拖动排序". This box is an explanatory annotation, not final product UI. Draw ONE screen only, no alternate layouts, no side-by-side comparison.
