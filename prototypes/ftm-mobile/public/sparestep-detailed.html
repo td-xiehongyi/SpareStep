@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpareStep · 详细静态原型 v1</title>
+<link rel="icon" href="data:,">
+<style>
+:root{
+  --desk:#ECE8E0; --desk-2:#E4DFD5;
+  --paper:#FAF8F3; --paper-2:#F3F0E9; --paper-3:#EBE7DE;
+  --ink:#2B2722; --ink-2:#5F584F; --ink-3:#978F84; --line:#DDD6CA; --line-2:#E9E4DA;
+  --sage:#EEF2E8; --sage-b:#D4DCCA; --sage-i:#5A7353;
+  --mist:#ECF1F3; --mist-b:#D2DCE1; --mist-i:#4E6779;
+  --sand:#F6F0E4; --sand-b:#E5DAC5; --sand-i:#8C6C42;
+  --mauve:#F3EDF0; --mauve-b:#E2D5DC; --mauve-i:#7C5A6A;
+  --accent:#5E7A5A; --accent-soft:#E3EADD;
+  --danger:#A9533F; --danger-bg:#B9644E;
+  --frame:#3A342D;
+  --wob:11px 13px 10px 12px / 12px 10px 13px 11px;
+  --shadow-card:0 1px 0 rgba(70,52,34,.05),0 2px 6px -3px rgba(70,52,34,.14);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .29 0 0 0 0 .22 0 0 0 .055 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--desk);background-image:var(--grain);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Segoe UI","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* ---------- review page ---------- */
+.page{max-width:1860px;margin:0 auto;padding:40px 28px 80px}
+.intro{display:flex;flex-wrap:wrap;gap:28px 48px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+.intro .eyebrow{font-size:12px;letter-spacing:.18em;color:var(--ink-3)}
+.intro h1{font-size:34px;font-weight:700;letter-spacing:-.02em;margin:8px 0 6px}
+.intro p{font-size:14px;color:var(--ink-2);line-height:1.7;max-width:560px}
+.palette{display:flex;flex-wrap:wrap;gap:10px}
+.sw{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 11px 5px 5px}
+.sw i{width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.08)}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 34px;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.toc a{font-size:13px;color:var(--ink-2);text-decoration:none;padding:5px 10px;border-radius:7px}
+.toc a:hover{background:var(--paper);color:var(--ink)}
+.group-title{font-size:13px;letter-spacing:.14em;color:var(--ink-3);margin:18px 0 18px;display:flex;align-items:center;gap:12px}
+.group-title:after{content:"";flex:1;height:1px;background:var(--line)}
+.gallery{display:flex;flex-wrap:wrap;gap:44px 36px;margin-bottom:44px}
+.shot{width:415px;scroll-margin-top:20px}
+.shot figcaption{padding:16px 6px 0}
+.shot figcaption b{font-size:15px;display:flex;gap:8px;align-items:baseline}
+.shot figcaption b em{font-style:normal;font-size:12px;color:var(--ink-3);font-weight:500}
+.shot figcaption p{font-size:13px;line-height:1.7;color:var(--ink-2);margin-top:6px}
+
+/* ---------- phone ---------- */
+.phone{width:415px;padding:11px;border-radius:58px;background:var(--frame);
+  box-shadow:0 0 0 1px #2a251f,inset 0 0 0 2px #4a433a,0 30px 50px -24px rgba(50,38,24,.45),0 8px 16px -8px rgba(50,38,24,.25)}
+.screen{position:relative;isolation:isolate;width:393px;height:852px;border-radius:47px;overflow:hidden;
+  background:var(--paper);background-image:var(--grain)}
+.status{position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:4px 34px 0 46px;font-size:16px;font-weight:600;z-index:20}
+.island{position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#15120f}
+.status svg{width:76px;height:13px}
+.home-ind{position:absolute;bottom:8px;left:50%;width:138px;height:5px;margin-left:-69px;border-radius:3px;background:var(--ink);z-index:30}
+.home-ind.light{background:#fff}
+
+/* ---------- app chrome ---------- */
+.appbar{position:absolute;top:54px;left:0;right:0;padding:8px 20px 0;z-index:3}
+.brand{display:flex;align-items:center;justify-content:space-between;height:44px}
+.brand h1{font-size:29px;font-weight:750;letter-spacing:-.03em}
+.brand .btn-ic{color:var(--ink-2)}
+.tagline{font-size:13px;color:var(--ink-3);margin-top:4px}
+.btn-ic{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:10px;color:var(--ink-2)}
+.doc{position:absolute;top:144px;left:0;right:0;bottom:0;padding:4px 20px 40px;overflow:hidden}
+.doc.top-sm{top:100px}
+
+/* ---------- category ---------- */
+.cat{margin-bottom:24px}
+.cat-h{display:flex;align-items:center;gap:6px;min-height:42px;margin-bottom:8px}
+.cat-h .caret{width:16px;height:16px;color:var(--ink-3);stroke-width:2.2;margin-left:-3px}
+.cat-h h2{flex:1;font-size:21px;font-weight:720;letter-spacing:-.01em;display:flex;align-items:center;gap:9px}
+.cat-h h2:before{content:"";width:4px;height:17px;border-radius:3px;background:var(--k-i)}
+.add{display:inline-grid;place-items:center;width:30px;height:30px;border:1px solid var(--line);border-radius:8px 9px 8px 10px;background:var(--paper);color:var(--ink-2)}
+.add svg{width:17px;height:17px}
+.gh{display:inline-grid;place-items:center;width:30px;height:36px;color:var(--ink-3)}
+.gh svg{width:20px;height:20px;stroke:none;fill:currentColor}
+.items{display:grid;gap:10px}
+.k-sage{--k:var(--sage);--k-b:var(--sage-b);--k-i:var(--sage-i)}
+.k-mist{--k:var(--mist);--k-b:var(--mist-b);--k-i:var(--mist-i)}
+.k-sand{--k:var(--sand);--k-b:var(--sand-b);--k-i:var(--sand-i)}
+.k-mauve{--k:var(--mauve);--k-b:var(--mauve-b);--k-i:var(--mauve-i)}
+
+/* ---------- card ---------- */
+.card{position:relative;display:flex;align-items:flex-start;background:var(--k);border:1px solid var(--k-b);border-radius:var(--wob);box-shadow:var(--shadow-card);min-height:74px;overflow:hidden}
+.txt{flex:1;min-width:0;padding:13px 4px 14px 15px;line-height:1.6;white-space:pre-line}
+.txt b{display:block;font-size:16px;font-weight:600;color:var(--ink)}
+.txt span{display:block;font-size:14.5px;color:var(--ink-2)}
+.card>.gh{margin:6px 5px 0 0;width:34px;height:38px;position:relative;z-index:2}
+.card.editing{border-color:var(--ink-2);box-shadow:0 0 0 3px rgba(94,122,90,.13),var(--shadow-card);background:var(--paper)}
+.caret-bar{display:inline-block;width:1.5px;height:1.1em;background:var(--accent);vertical-align:-.18em;margin-left:1px}
+.placeholder{color:var(--ink-3)!important}
+
+/* ---------- edit bar + keyboard ---------- */
+.kb-wrap{position:absolute;left:0;right:0;bottom:0;z-index:10}
+.edit-bar{display:flex;align-items:center;justify-content:space-between;height:42px;padding:0 16px;background:var(--paper-2);border-top:1px solid var(--line);font-size:12px;color:var(--ink-3)}
+.edit-bar strong{font-size:14px;color:var(--accent);font-weight:650}
+.kb{background:#E6E1D7;padding:9px 4px 38px;display:grid;gap:11px}
+.kr{display:flex;gap:6px;justify-content:center}
+.kr span{flex:0 0 33px;height:43px;display:grid;place-items:center;background:#FBF9F4;border-radius:6px;box-shadow:0 1px 0 #BEB6A8;font-size:19px;color:var(--ink)}
+.kr span.f{flex:0 0 44px;background:#D6CFC2}
+.kr span.w{flex:0 0 88px;background:#D6CFC2;font-size:14px}
+.kr span.sp{flex:1;font-size:14px;color:var(--ink-2)}
+.kr span.go{flex:0 0 88px;background:var(--accent);color:#fff;font-size:14px;box-shadow:0 1px 0 #455c42}
+.kr span svg{width:20px;height:20px}
+
+/* ---------- states ---------- */
+.lifted{transform:rotate(-1.4deg) translate(6px,-2px);box-shadow:0 18px 28px -14px rgba(60,42,24,.42),0 3px 8px -3px rgba(60,42,24,.2);border-color:var(--ink-3);z-index:4}
+.slot{height:74px;border:1.5px dashed var(--line);border-radius:var(--wob);background:rgba(235,231,222,.55)}
+.drop-line{position:relative;height:2px;background:var(--accent);margin:-4px 2px;border-radius:2px}
+.drop-line:before,.drop-line:after{content:"";position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.drop-line:before{left:-4px}.drop-line:after{right:-4px}
+.pill{position:absolute;left:50%;transform:translateX(-50%);z-index:12;display:flex;align-items:center;gap:8px;white-space:nowrap;
+  background:#2F2A24;color:#F6F2EA;font-size:13px;padding:11px 16px;border-radius:13px;box-shadow:0 10px 24px -10px rgba(40,30,20,.5)}
+.pill svg{width:17px;height:17px;color:#BFD3B6}
+.pill.soft{background:var(--paper);color:var(--ink-2);border:1px solid var(--line);box-shadow:var(--shadow-card)}
+.pill.top{top:150px;bottom:auto}
+.hold-fill{position:absolute;inset:0;width:62%;background:rgba(94,122,90,.16);pointer-events:none}
+.hold-bar{position:absolute;left:0;bottom:0;height:3px;width:62%;background:var(--accent)}
+.card.holding{border-color:#9DB096}
+.swipe{position:relative;border-radius:var(--wob);overflow:hidden;background:var(--danger-bg)}
+.swipe .card{transform:translateX(-86px);border-radius:var(--wob);box-shadow:4px 0 10px -6px rgba(60,40,20,.35)}
+.swipe .del{position:absolute;top:0;right:0;bottom:0;width:86px;display:grid;place-content:center;justify-items:center;gap:5px;color:#FFF6F1;font-size:13px}
+.swipe .del svg{width:21px;height:21px}
+
+/* ---------- overlays ---------- */
+.scrim{position:absolute;inset:0;background:rgba(43,37,30,.36);z-index:5}
+.scrim.light{background:rgba(43,37,30,.22)}
+.sel{position:relative;z-index:6}
+.sel .card{border:1.5px solid var(--ink);box-shadow:0 10px 26px -12px rgba(30,22,14,.5)}
+.sel .card>.gh{background:var(--paper);border-radius:9px;color:var(--ink)}
+.menu{position:absolute;right:0;top:calc(100% + 11px);width:206px;background:var(--paper);border:1px solid #CFC7B9;border-radius:14px 13px 15px 13px;padding:5px;box-shadow:0 18px 34px -16px rgba(30,22,14,.5);z-index:7}
+.menu:before{content:"";position:absolute;top:-6px;right:17px;width:11px;height:11px;background:var(--paper);border-left:1px solid #CFC7B9;border-top:1px solid #CFC7B9;transform:rotate(45deg)}
+.menu div{display:flex;align-items:center;gap:12px;height:48px;padding:0 12px;font-size:15px;border-radius:9px}
+.menu div+div{border-top:1px solid var(--line-2);border-radius:0}
+.menu div.hl{background:var(--accent-soft)}
+.menu div svg{color:var(--ink-2)}
+.menu .danger,.menu .danger svg{color:var(--danger)}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:8;background:var(--paper);background-image:var(--grain);border-radius:26px 28px 0 0;padding:10px 22px 44px;box-shadow:0 -14px 30px -18px rgba(40,30,20,.4)}
+.handle{width:40px;height:5px;border-radius:3px;background:#CFC7B9;margin:0 auto 16px}
+.sheet-h{display:flex;align-items:center;justify-content:space-between}
+.sheet-h h3{font-size:20px;font-weight:720}
+.sheet-d{font-size:13px;color:var(--ink-3);margin:4px 0 16px}
+.row{display:flex;align-items:center;gap:13px;padding:15px 14px;border:1px solid var(--line);border-radius:13px 12px 14px 12px;background:var(--paper-2);font-size:16px}
+.row .grow{flex:1}
+.row small{display:block;font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.list .opt{display:flex;align-items:center;gap:13px;padding:15px 10px;border-bottom:1px solid var(--line-2);font-size:16px}
+.list .opt i{width:10px;height:10px;border-radius:50%;background:var(--k-i)}
+.list .opt .grow{flex:1}
+.list .opt.on{background:var(--accent-soft);border-radius:11px;border-bottom-color:transparent}
+.list .opt.on svg{color:var(--accent)}
+.btn-wide{display:block;text-align:center;margin-top:18px;padding:13px;border-radius:12px;background:var(--paper-3);font-size:15px;color:var(--ink-2)}
+
+/* ---------- records ---------- */
+.rec-bar{position:absolute;top:54px;left:0;right:0;padding:8px 14px 0;z-index:3}
+.rec-bar .top{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;height:44px}
+.rec-bar h1{text-align:center;font-size:18px;font-weight:700}
+.seg{display:grid;grid-template-columns:1fr 1fr;margin:12px 6px 0;padding:3px;background:var(--paper-3);border-radius:12px}
+.seg span{display:flex;justify-content:center;align-items:center;gap:6px;height:36px;border-radius:9px;font-size:14.5px;color:var(--ink-3)}
+.seg span.on{background:var(--paper);color:var(--ink);font-weight:650;box-shadow:0 1px 3px rgba(60,40,20,.12)}
+.seg em{font-style:normal;font-size:12px;padding:0 6px;border-radius:8px;background:rgba(0,0,0,.05)}
+.rec-doc{position:absolute;top:166px;left:0;right:0;bottom:0;padding:0 20px}
+.cap{font-size:12.5px;color:var(--ink-3);margin:2px 0 14px}
+.rec{background:var(--paper);border:1px solid var(--line);border-radius:var(--wob);padding:13px 15px 13px;margin-bottom:12px;box-shadow:var(--shadow-card)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--k-i);background:var(--k);border:1px solid var(--k-b);padding:2px 9px;border-radius:999px}
+.chip:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--k-i)}
+.rec .txt{padding:8px 0 10px}
+.rec.done .txt b{color:var(--ink-2)}
+.rec-f{display:flex;justify-content:flex-end;border-top:1px dashed var(--line);padding-top:10px}
+.restore{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--accent);padding:6px 11px;border:1px solid #C9D5C2;background:var(--accent-soft);border-radius:9px}
+.restore svg{width:16px;height:16px}
+.empty{text-align:center;padding-top:120px;color:var(--ink-3)}
+.empty .art{width:96px;height:96px;margin:0 auto 18px;border-radius:30px 34px 28px 32px;background:var(--paper-2);border:1px solid var(--line);display:grid;place-items:center}
+.empty .art svg{width:40px;height:40px;stroke-width:1.5}
+.empty h4{font-size:16px;font-weight:600;color:var(--ink-2)}
+.empty p{font-size:13px;margin-top:6px}
+@media (max-width:480px){.page{padding:24px 10px}.shot,.phone{width:100%}.phone{padding:8px}.screen{width:100%;}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-grip" viewBox="0 0 24 24"><circle cx="7" cy="6" r="1.7"/><circle cx="12" cy="6" r="1.7"/><circle cx="17" cy="6" r="1.7"/><circle cx="7" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="17" cy="12" r="1.7"/><circle cx="7" cy="18" r="1.7"/><circle cx="12" cy="18" r="1.7"/><circle cx="17" cy="18" r="1.7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 6.5h6l2 2h9v10.5h-17z"/></symbol>
+  <symbol id="i-archive" viewBox="0 0 24 24"><path d="M3.5 4.5h17v4h-17zM5 8.5v11h14v-11M10 12.5h4"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-shift" viewBox="0 0 24 24"><path d="M12 4.5l7 7.5h-4v7H9v-7H5z"/></symbol>
+  <symbol id="i-bksp" viewBox="0 0 24 24"><path d="M8.5 6H20v12H8.5L3 12zM11.5 9.5l5 5M16.5 9.5l-5 5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+  <symbol id="i-sys" viewBox="0 0 76 13"><g fill="currentColor"><rect x="0" y="8" width="3" height="5" rx="1"/><rect x="4.5" y="6" width="3" height="7" rx="1"/><rect x="9" y="3.5" width="3" height="9.5" rx="1"/><rect x="13.5" y="1" width="3" height="12" rx="1"/><path d="M31 3.2a10 10 0 0 1 13 0l-1.4 1.5a8 8 0 0 0-10.2 0zM33.4 5.8a6.4 6.4 0 0 1 8.2 0l-1.4 1.5a4.4 4.4 0 0 0-5.4 0zM35.8 8.4a2.8 2.8 0 0 1 3.4 0L37.5 10.2z"/><rect x="51" y="1.5" width="22" height="10" rx="3" fill="none" stroke="currentColor" stroke-opacity=".45"/><rect x="53" y="3.5" width="16" height="6" rx="1.5"/><rect x="74.2" y="4.5" width="1.6" height="4" rx=".8" opacity=".45"/></g></symbol>
+</svg>
+
+<div class="page">
+  <header class="intro">
+    <div>
+      <div class="eyebrow">SPARESTEP · 详细原型 · 静态 V1</div>
+      <h1>留给下一段空闲时间</h1>
+      <p>沿用 V2 文档式布局与 V4 选中块菜单，采用安静纸感风格：暖白纸底、极淡纸纹、按分类区分的低饱和卡片色。共 14 个静态画面，动效留待后续阶段。</p>
+    </div>
+    <div class="palette" aria-label="配色">
+      <span class="sw"><i style="background:#FAF8F3"></i>纸底</span>
+      <span class="sw"><i style="background:#2B2722"></i>墨色</span>
+      <span class="sw"><i style="background:#EEF2E8;border-color:#5A7353"></i>短期 · 鼠尾草</span>
+      <span class="sw"><i style="background:#ECF1F3;border-color:#4E6779"></i>长期 · 雾蓝</span>
+      <span class="sw"><i style="background:#F6F0E4;border-color:#8C6C42"></i>随手记 · 暖沙</span>
+      <span class="sw"><i style="background:#F3EDF0;border-color:#7C5A6A"></i>新分类 · 灰粉</span>
+      <span class="sw"><i style="background:#5E7A5A"></i>确认</span>
+      <span class="sw"><i style="background:#B9644E"></i>删除</span>
+    </div>
+  </header>
+  <nav class="toc">
+    <a href="#s01">01 首页</a><a href="#s02">02 块内编辑</a><a href="#s03">03 创建分类</a><a href="#s04">04 收起与空分类</a>
+    <a href="#s05">05 拖动排序</a><a href="#s06">06 长按完成</a><a href="#s07">07 完成提示</a><a href="#s08">08 左滑删除</a>
+    <a href="#s09">09 九点菜单</a><a href="#s10">10 移动到分类</a><a href="#s11">11 设置</a>
+    <a href="#s12">12 归档</a><a href="#s13">13 回收站</a><a href="#s14">14 空回收站</a>
+  </nav>
+
+  <!-- ================= 首页与编辑 ================= -->
+  <div class="group-title">首页与编辑</div>
+  <div class="gallery">
+
+    <!-- 01 -->
+    <figure class="shot" id="s01"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card"><div class="txt"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+            <article class="card"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span><span>下一步：写清楚每个方向要解决的问题。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+        <section class="cat k-sand"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>随手记</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>关于多 Agent 协作流程的想法</b><span>先确认需求，再画原型，最后验证实际体验。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+      </main>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>01 首页 <em>V2 · 图 1</em></b><p>单列文档。分类左侧小三角收起/展开，＋ 在该类末尾新建，九点柄拖动分类。事项正文完整显示；每条右侧九点柄：点击开菜单、按住拖动。</p></figcaption></figure>
+
+    <!-- 02 -->
+    <figure class="shot" id="s02"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card"><div class="txt"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+            <article class="card editing"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span><span>下一步：写清楚每个方向要解决的问题。</span><span>交互稿周五前给老师看<i class="caret-bar"></i></span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div></section>
+      </main>
+      <div class="kb-wrap">
+        <div class="edit-bar"><span>回车换行 · 新块输入「# 分类名」创建分类</span><strong>完成</strong></div>
+        <div class="kb">
+          <div class="kr"><span>q</span><span>w</span><span>e</span><span>r</span><span>t</span><span>y</span><span>u</span><span>i</span><span>o</span><span>p</span></div>
+          <div class="kr"><span>a</span><span>s</span><span>d</span><span>f</span><span>g</span><span>h</span><span>j</span><span>k</span><span>l</span></div>
+          <div class="kr"><span class="f"><svg class="i"><use href="#i-shift"/></svg></span><span>z</span><span>x</span><span>c</span><span>v</span><span>b</span><span>n</span><span>m</span><span class="f"><svg class="i"><use href="#i-bksp"/></svg></span></div>
+          <div class="kr"><span class="w">123</span><span class="sp">空格</span><span class="go">换行</span></div>
+        </div>
+      </div>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>02 块内编辑 <em>V2 · 图 2</em></b><p>点正文原位编辑，卡片转为纸白底、深色描边。回车在块内换行，卡片随内容撑高。键盘上方操作条给出语法提示和「完成」。</p></figcaption></figure>
+
+    <!-- 03 -->
+    <figure class="shot" id="s03"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+        <section class="cat k-sand"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>随手记</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card"><div class="txt"><b>关于多 Agent 协作流程的想法</b><span>先确认需求，再画原型，最后验证实际体验。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+            <article class="card editing" style="min-height:56px"><div class="txt"><b style="font-size:18px"># 生活<i class="caret-bar"></i></b></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+      </main>
+      <div class="pill soft" style="bottom:308px"><svg class="i" style="color:var(--accent)"><use href="#i-folder"/></svg>按回车，创建分类「生活」</div>
+      <div class="kb-wrap">
+        <div class="edit-bar"><span>回车换行 · 新块输入「# 分类名」创建分类</span><strong>完成</strong></div>
+        <div class="kb">
+          <div class="kr"><span>q</span><span>w</span><span>e</span><span>r</span><span>t</span><span>y</span><span>u</span><span>i</span><span>o</span><span>p</span></div>
+          <div class="kr"><span>a</span><span>s</span><span>d</span><span>f</span><span>g</span><span>h</span><span>j</span><span>k</span><span>l</span></div>
+          <div class="kr"><span class="f"><svg class="i"><use href="#i-shift"/></svg></span><span>z</span><span>x</span><span>c</span><span>v</span><span>b</span><span>n</span><span>m</span><span class="f"><svg class="i"><use href="#i-bksp"/></svg></span></div>
+          <div class="kr"><span class="w">123</span><span class="sp">空格</span><span class="go">换行</span></div>
+        </div>
+      </div>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>03 创建分类 <em>V2 · 图 3</em></b><p>点 ＋ 插入空白块，输入「# 生活」后回车，该块转为分类标题。已有正文里的 # 不会转换。浮动提示只在符合语法时出现。</p></figcaption></figure>
+
+    <!-- 04 -->
+    <figure class="shot" id="s04"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-right"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+        <section class="cat k-sand"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>随手记</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>关于多 Agent 协作流程的想法</b><span>先确认需求，再画原型，最后验证实际体验。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+        <section class="cat k-mauve"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>生活</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div></section>
+      </main>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>04 收起与空分类 <em>已确认决定</em></b><p>「短期」已收起（三角朝右，事项保留）。新建的「生活」为空分类，只显示标题行，不放提示卡片。点标题可原位改名。</p></figcaption></figure>
+  </div>
+
+  <!-- ================= 手势状态 ================= -->
+  <div class="group-title">手势状态（静态截帧）</div>
+  <div class="gallery">
+
+    <!-- 05 -->
+    <figure class="shot" id="s05"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">拖到目标位置后松开</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card"><div class="txt"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+            <div class="drop-line"></div>
+            <article class="card k-mist lifted"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh" style="color:var(--ink)"><svg class="i"><use href="#i-grip"/></svg></span></article>
+            <article class="card"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><div class="slot"></div></div></section>
+      </main>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>05 拖动排序 <em>V2 · 图 4</em></b><p>按住九点柄拖动，事项浮起并轻微倾斜，保留原分类底色。绿色插入线标出落点，原位置留虚线占位。可跨分类，松开后颜色随新分类变化。</p></figcaption></figure>
+
+    <!-- 06 -->
+    <figure class="shot" id="s06"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card holding"><i class="hold-fill"></i><div class="txt" style="position:relative"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span><i class="hold-bar"></i></article>
+            <article class="card"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span><span>下一步：写清楚每个方向要解决的问题。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+      </main>
+      <div class="pill" style="bottom:46px"><svg class="i"><use href="#i-check"/></svg>继续按住以完成 · 松手取消</div>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>06 长按完成 <em>V2 · 图 5</em></b><p>浏览状态按住正文 0.8 秒。卡片内由左向右填充淡绿色，底部进度线同步。满格后归档，提前松手回退，编辑状态不触发。</p></figcaption></figure>
+
+    <!-- 07 -->
+    <figure class="shot" id="s07"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span><span>下一步：写清楚每个方向要解决的问题。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+        <section class="cat k-sand"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>随手记</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>关于多 Agent 协作流程的想法</b><span>先确认需求，再画原型，最后验证实际体验。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+      </main>
+      <div class="pill" style="bottom:46px"><svg class="i"><use href="#i-check"/></svg>已完成，移入归档</div>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>07 完成提示 <em>沿用交互原型</em></b><p>归档后事项离开列表，底部出现约 2 秒的墨色提示。移动、删除、恢复使用同一种提示样式。</p></figcaption></figure>
+
+    <!-- 08 -->
+    <figure class="shot" id="s08"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <div class="swipe"><div class="del"><svg class="i"><use href="#i-trash"/></svg>删除</div><article class="card"><div class="txt" style="white-space:nowrap"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div>
+            <article class="card"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span><span>下一步：写清楚每个方向要解决的问题。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+      </main>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>08 左滑删除 <em>V2 · 图 6</em></b><p>左滑只露出赭红「删除」区，必须再点一次才移入回收站。左侧文字被位移裁切，点空白处收回。</p></figcaption></figure>
+  </div>
+
+  <!-- ================= 菜单与面板 ================= -->
+  <div class="group-title">菜单与面板</div>
+  <div class="gallery">
+
+    <!-- 09 -->
+    <figure class="shot" id="s09"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <div class="scrim"></div>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card"><div class="txt"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+            <div class="sel"><article class="card"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span><span>下一步：写清楚每个方向要解决的问题。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+              <div class="menu" role="menu">
+                <div class="hl"><svg class="i"><use href="#i-check"/></svg>完成并归档</div>
+                <div><svg class="i"><use href="#i-folder"/></svg>移动到分类<svg class="i" style="margin-left:auto;width:16px;color:var(--ink-3)"><use href="#i-right"/></svg></div>
+                <div class="danger"><svg class="i"><use href="#i-trash"/></svg>删除</div>
+              </div></div>
+          </div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+      </main>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>09 九点菜单 <em>V4 · 选中块</em></b><p>点击九点柄：背景压暗，当前块保留原位并加深描边；菜单在块下方右对齐，尖角指向九点柄。块位于屏幕下部时菜单改在上方。删除项使用赭红。</p></figcaption></figure>
+
+    <!-- 10 -->
+    <figure class="shot" id="s10"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card"><div class="txt"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+            <article class="card"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+      </main>
+      <div class="scrim"></div>
+      <section class="sheet">
+        <div class="handle"></div>
+        <div class="sheet-h"><h3>移动到分类</h3><span class="btn-ic"><svg class="i"><use href="#i-x"/></svg></span></div>
+        <p class="sheet-d">「准备软件交互项目考核」移到：</p>
+        <div class="list">
+          <div class="opt on k-sage"><i></i><span class="grow">短期</span><svg class="i"><use href="#i-check"/></svg></div>
+          <div class="opt k-mist"><i></i><span class="grow">长期</span></div>
+          <div class="opt k-sand"><i></i><span class="grow">随手记</span></div>
+          <div class="opt k-mauve"><i></i><span class="grow">生活</span></div>
+        </div>
+        <span class="btn-wide">取消</span>
+      </section>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>10 移动到分类 <em>菜单二级</em></b><p>底部面板列出全部分类，用分类色点标识，当前所在分类以淡绿底和勾号标出。点选即移动并提示。</p></figcaption></figure>
+
+    <!-- 11 -->
+    <figure class="shot" id="s11"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="appbar"><div class="brand"><h1>SpareStep</h1><span class="btn-ic"><svg class="i"><use href="#i-gear"/></svg></span></div><p class="tagline">想起来就记下，有空时再看看。</p></header>
+      <main class="doc">
+        <section class="cat k-sage"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>短期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items">
+            <article class="card"><div class="txt"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+            <article class="card"><div class="txt"><b>准备软件交互项目考核</b><span>先想三个方向，再整理需要的资料。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article>
+          </div></section>
+        <section class="cat k-mist"><div class="cat-h"><svg class="i caret"><use href="#i-down"/></svg><h2>长期</h2><span class="add"><svg class="i"><use href="#i-plus"/></svg></span><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></div>
+          <div class="items"><article class="card"><div class="txt"><b>复习概率论与算法</b><span>每天有空时推进一点。</span></div><span class="gh"><svg class="i"><use href="#i-grip"/></svg></span></article></div></section>
+      </main>
+      <div class="scrim"></div>
+      <section class="sheet">
+        <div class="handle"></div>
+        <div class="sheet-h"><h3>设置</h3><span class="btn-ic"><svg class="i"><use href="#i-x"/></svg></span></div>
+        <p class="sheet-d">整理完成和暂时移开的事项</p>
+        <div class="row"><svg class="i" style="color:var(--ink-2)"><use href="#i-archive"/></svg><span class="grow">归档与回收站<small>归档 2 · 回收站 1</small></span><svg class="i" style="color:var(--ink-3);width:18px"><use href="#i-right"/></svg></div>
+        <span class="btn-wide">关闭</span>
+      </section>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>11 设置 <em>V2 · 图 7</em></b><p>首页齿轮打开底部面板，目前只放「归档与回收站」一个入口，副标题显示两边的数量。</p></figcaption></figure>
+  </div>
+
+  <!-- ================= 记录管理 ================= -->
+  <div class="group-title">归档与回收站</div>
+  <div class="gallery">
+
+    <!-- 12 -->
+    <figure class="shot" id="s12"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="rec-bar"><div class="top"><span class="btn-ic"><svg class="i"><use href="#i-left"/></svg></span><h1>归档与回收站</h1><span></span></div>
+        <div class="seg"><span class="on">归档 <em>2</em></span><span>回收站 <em>1</em></span></div></header>
+      <main class="rec-doc">
+        <p class="cap">完成过的事，都在这里。</p>
+        <article class="rec done k-sage"><span class="chip">短期</span><div class="txt"><b>补充实验截图，完成报告</b><span>把运行结果截图补齐，再检查报告格式。</span></div><div class="rec-f"><span class="restore"><svg class="i"><use href="#i-undo"/></svg>恢复为待办</span></div></article>
+        <article class="rec done k-sand"><span class="chip">随手记</span><div class="txt"><b>整理课程资料链接</b><span>放进同一个文件夹，方便之后查找。</span></div><div class="rec-f"><span class="restore"><svg class="i"><use href="#i-undo"/></svg>恢复为待办</span></div></article>
+      </main>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>12 归档 <em>V2 · 图 8</em></b><p>顶部分段标签切换归档和回收站，附数量。记录卡用纸白底，分类以色标签标注，「恢复为待办」回到原分类。</p></figcaption></figure>
+
+    <!-- 13 -->
+    <figure class="shot" id="s13"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="rec-bar"><div class="top"><span class="btn-ic"><svg class="i"><use href="#i-left"/></svg></span><h1>归档与回收站</h1><span></span></div>
+        <div class="seg"><span>归档 <em>2</em></span><span class="on">回收站 <em>1</em></span></div></header>
+      <main class="rec-doc">
+        <p class="cap">删除的事项可以恢复到原分类。</p>
+        <article class="rec k-mist"><span class="chip">长期</span><div class="txt"><b>每周读一篇论文</b><span>先从推荐列表里挑感兴趣的。</span></div><div class="rec-f"><span class="restore"><svg class="i"><use href="#i-undo"/></svg>恢复到原分类</span></div></article>
+      </main>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>13 回收站 <em>V2 · 图 8 说明</em></b><p>与归档同一布局。只提供恢复，不提供永久删除或自动清空（保留期限待定）。</p></figcaption></figure>
+
+    <!-- 14 -->
+    <figure class="shot" id="s14"><div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><i class="island"></i><svg><use href="#i-sys"/></svg></div>
+      <header class="rec-bar"><div class="top"><span class="btn-ic"><svg class="i"><use href="#i-left"/></svg></span><h1>归档与回收站</h1><span></span></div>
+        <div class="seg"><span>归档 <em>2</em></span><span class="on">回收站 <em>0</em></span></div></header>
+      <main class="rec-doc">
+        <div class="empty"><div class="art"><svg class="i"><use href="#i-trash"/></svg></div><h4>回收站是空的</h4><p>删除的事项会保留在这里。</p></div>
+      </main>
+      <i class="home-ind"></i>
+    </div></div>
+    <figcaption><b>14 空回收站 <em>空态</em></b><p>记录页保留空态说明（首页空分类不显示提示，两者区分）。归档为空时显示「还没有归档事项」。</p></figcaption></figure>
+  </div>
+</div>
+</body>
+</html>

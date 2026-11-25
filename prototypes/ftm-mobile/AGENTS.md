@@ -79,3 +79,7 @@ When any text-entry control loses focus, dismiss the simulated keyboard. If the 
 ## Product name
 
 - Use SpareStep as the user-facing name for the app heading, desktop preview label, and browser title. See ../../.team/changes/product-20261124-sparestep-name.md.
+
+## Static visual baseline
+
+Use [SpareStep detailed static v1](public/sparestep-detailed.html) as the user-selected visual reference for future prototype edits, including screen layout, palette, and depicted UI states. See [the baseline decision](../../.team/changes/product-20261125-detailed-static-baseline.md).

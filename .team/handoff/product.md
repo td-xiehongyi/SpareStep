@@ -19,11 +19,33 @@
     {
       "record": ".team/work/PRODUCT-SPARESTEP-NAME.md",
       "id": "PRODUCT-SPARESTEP-NAME"
+    },
+    {
+      "id": "PRODUCT-UI-STYLE-REVIEW",
+      "record": ".team/work/PRODUCT-UI-STYLE-REVIEW.md"
+    },
+    {
+      "id": "PRODUCT-UI-STATIC-PREVIEW",
+      "record": ".team/work/PRODUCT-UI-STATIC-PREVIEW.md"
+    },
+    {
+      "record": ".team/work/PRODUCT-LOOSELEAF-PREVIEW.md",
+      "id": "PRODUCT-LOOSELEAF-PREVIEW"
+    },
+    {
+      "id": "PRODUCT-LOOSELEAF-SCREENS",
+      "record": ".team/work/PRODUCT-LOOSELEAF-SCREENS.md"
+    },
+    {
+      "id": "PRODUCT-LOOSELEAF-PHONE",
+      "record": ".team/work/PRODUCT-LOOSELEAF-PHONE.md"
+    },
+    {
+      "id": "PRODUCT-DETAILED-STATIC-V1",
+      "record": ".team/work/PRODUCT-DETAILED-STATIC-V1.md"
     }
   ],
-  "in_flight": [
-    "本机预览 Vite exec session 73683，PID 13156，http://127.0.0.1:4175/，为用户体验保持运行；恢复详情见 PRODUCT-CATEGORY-TOGGLE"
-  ]
+  "in_flight": []
 }
 ```
 

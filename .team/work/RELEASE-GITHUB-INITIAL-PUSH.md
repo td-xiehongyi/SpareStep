@@ -4,11 +4,12 @@
 {
   "id": "RELEASE-GITHUB-INITIAL-PUSH",
   "role": "release",
-  "state": "blocked",
+  "state": "done",
   "authorization": {
     "instruction": "请你关联这个仓库 然后推送 https://github.com/td-xiehongyi/SpareStep.git",
     "source_thread": "01a20c87-86b5-7d10-b765-dda7bd153b85",
-    "scope": "将 D:/MyProject/FTM 现有项目初始化 Git、关联指定仓库、创建首次提交并推送；排除依赖、构建产物和敏感本地配置"
+    "scope": "将 D:/MyProject/FTM 现有项目初始化 Git、关联指定仓库、创建首次提交并推送；排除依赖、构建产物和敏感本地配置",
+    "public_confirmation": "助手明确询问是否将91文件连同.team、AGENTS.md中的协作记录、本机路径和对话标识公开，用户回复：推送。"
   },
   "stop_at": "核实远端分支与本地提交一致后停止，不部署网站或启动新业务开发",
   "decisions": [],
@@ -20,12 +21,10 @@
   "evidence": [
     ".team/work/RELEASE-GITHUB-INITIAL-PUSH.md"
   ],
-  "version": "本次本地首次提交，准确 SHA 见 git log；远端仍为空",
-  "unverified": [
-    "远端推送未执行：自动审批拒绝公开包含协作记录和内部规则的完整项目快照"
-  ],
+  "version": "30ab0b8e4b32a73ec00901b1cf9f10e22d230ae5",
+  "unverified": [],
   "next": [
-    "用户确认是否公开 .team、AGENTS.md 等内部记录；或明确选择仅推送源码和原型后调整候选文件"
+    "由主对话汇总本任务；新增产品工作区内容不在本次确认的91文件提交内"
   ]
 }
 ```
@@ -45,3 +44,11 @@
 2026-11-24：自动审批拒绝执行含 commit/push 的命令，命令未启动。理由：91 个项目文件包含协作记录和内部规则，目标为公共仓库；虽已授权仓库推送，但尚未明确授权这批具体内部内容公开。本轮只保存本地提交，远端不写入，待用户确认公开范围。
 
 git diff --cached --check 报告四份 handoff 首页的既有文件尾空行，仅格式提示；不修改其他角色文件。未重启预览、未修改业务代码。
+
+## 推送完成（2026-11-25）
+
+用户在完整公开范围确认问题后回复“推送”，公开授权已补全。此前网络失败及审批阻塞均已解除。
+
+执行 git -c http.sslBackend=openssl -c http.version=HTTP/1.1 -c http.postBuffer=33554432 push --set-upstream origin main 成功，退出码 0，输出 new branch main -> main；本地 main 已跟踪 origin/main。独立 git ls-remote 核实 refs/heads/main 为 30ab0b8e4b32a73ec00901b1cf9f10e22d230ae5，与本地 HEAD 一致；GitHub API 亦确认 main 存在。
+
+本次仅公开原已确认的91文件提交。随后产品角色新增评审与 Looseleaf 样稿、产品首页变化保留本地，未加入本次提交。此完成记录为推送后的本地交接更新，未另行提交。未强推、重启预览或部署网站。
