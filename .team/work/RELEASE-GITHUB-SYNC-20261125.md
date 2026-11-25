@@ -4,7 +4,7 @@
 {
   "id": "RELEASE-GITHUB-SYNC-20261125",
   "role": "release",
-  "state": "running",
+  "state": "done",
   "authorization": {
     "instruction": "请你将当前项目的内容 推送到云端仓库",
     "source_thread": "01a20c87-86b5-7d10-b765-dda7bd153b85",
@@ -19,12 +19,10 @@
   "evidence": [
     ".team/work/RELEASE-GITHUB-SYNC-20261125.md"
   ],
-  "version": null,
-  "unverified": [
-    "待提交与远端核验"
-  ],
+  "version": "2c08eead8cd4cd9de63283645fbfcb388d0ba654（当前原型与协作快照）",
+  "unverified": [],
   "next": [
-    "检查运行时与协作记录，提交当前快照，非强制推送并核验"
+    "主对话按原分工汇总共享索引；后续业务按用户指令启动"
   ]
 }
 ```
@@ -36,3 +34,8 @@
 2026-11-25：28个运行时文件检查通过；详细静态稿 SHA256 FF6293CA65163F034BD9669C54B998C716D094A58F1BC7C3637E3AA766BF80C5 与产品记录一致。check_team.py --require-ready 的 records_valid/entries_ready/task_coverage_complete/ready 均 true，10项待主对话汇总；不以记录校验代替业务验收。本轮无业务代码修改，未重跑构建或浏览器业务验收。远端main与本地基线一致。
 
 暂存26个变化文件。git diff --cached --check 仅发现既有 sparestep-looseleaf.html 第322行尾空格，保留样稿原文；暂存后无未暂存变化。
+
+
+## 同步完成（2026-11-25）
+
+提交2c08eead8cd4cd9de63283645fbfcb388d0ba654包含26个变化文件，非强制推送main成功；独立git ls-remote确认远端与本地HEAD一致。新增详细静态稿、Looseleaf各样稿及产品任务/决定/交接均已同步。推送期间产品角色追加了交接授权说明，本轮补充提交该文本和此完成记录；业务源码未变。未部署网站、未启动预览；记录检查通过不代表正式产品验收。
